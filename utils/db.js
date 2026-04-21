@@ -10,13 +10,12 @@ const config = {
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
     ssl: {
-        rejectUnauthorized: true,
-        ca: process.env.CA_DB,
+        rejectUnauthorized: false,
     },
 };
 
-export function db_connect(){
+export async function db_connect(){
     const client = new pg.Client(config);
-    client.connect();
+    await client.connect();
     return client;
 }
