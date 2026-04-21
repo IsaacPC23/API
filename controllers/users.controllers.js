@@ -3,16 +3,15 @@ import { db_connect } from "../utils/db.js"
 import { getSalt } from "../utils/hash.js";
 
 export const getUsers = async (req, res)=>{
-    const sql = db_connect();
+    const sql = await db_connect();
     const text = "SELECT * FROM users";
     const result = await sql.query(text);
-
     console.log(result.rows);
     res.json(result.rows);
 }
 
 export const getUser = async (req, res)=>{
-    const sql = db_connect();
+    const sql = await db_connect();
     const text = "SELECT * FROM users WHERE id = $1";
     const values = [req.params.id];
     const result = await sql.query(text, values);
@@ -25,7 +24,7 @@ export const getUser = async (req, res)=>{
 }
 
 export const postUser = async (req, res)=>{
-    const sql = db_connect();
+    const sql = await db_connect();
     const {username, password} = req.body
     const text = "INSERT INTO users (username, password) VALUES ($1, $2)";
     const salt = getSalt(process.env.SALT_SIZE);
@@ -35,8 +34,9 @@ export const postUser = async (req, res)=>{
     const result = await sql.query(text, values);
     res.json(result)
 }
+
 export const putUser = async (req, res)=>{
-    const sql = db_connect();
+    const sql = await db_connect();
     const id = req.params.id
     const {username, password} = req.body
     const text = "UPDATE users SET username = $1, password = $2 WHERE id = $3";
@@ -44,8 +44,9 @@ export const putUser = async (req, res)=>{
     const result = await sql.query(text, values);
     res.json(result)
 }
+
 export const deleteUser = async (req, res)=>{
-    const sql = db_connect();
+    const sql = await db_connect();
     const id = req.params.id
     const text = "DELETE FROM users WHERE id = $1";
     const values = [id];
